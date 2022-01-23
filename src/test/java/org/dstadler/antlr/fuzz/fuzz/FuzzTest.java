@@ -70,6 +70,16 @@ class FuzzTest {
 	}
 
 	@Test
+	public void testNullPointerException() throws IllegalAccessException {
+		// this causes a ClassCastException, we ignore this for now to continue fuzzing for other problems
+		Fuzz.fuzzerTestOneInput((
+				"lexer grammar a;\n" +
+				"FROM: R ;�REF: R;\n" +
+				"fragment R:('r');"
+		).getBytes(StandardCharsets.UTF_8));
+	}
+
+	@Test
 	public void testStringIndexOutOfBoundsException() throws IllegalAccessException {
 		// this causes a ClassCastException, we ignore this for now to continue fuzzing for other problems
 		Fuzz.fuzzerTestOneInput((

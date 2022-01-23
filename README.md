@@ -49,6 +49,15 @@ You can use `--keep_going=10` to report a given number of exceptions before stop
 
 See `./jazzer` for options which can control details of how Jazzer operates.
 
+# Found issues
+
+The following issues were detected:
+* ClassCastException
+* StringIndexOutOfBoundsException
+* NullPointerException
+
+For now the Fuzzing target ignores these, see the class `FuzzTest` for reproducing test-cases for all of these.
+
 # License
 
 Copyright 2022 Dominik Stadler
