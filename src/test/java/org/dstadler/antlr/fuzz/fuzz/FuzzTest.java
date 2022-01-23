@@ -19,7 +19,7 @@ class FuzzTest {
 			"WS : [ \\t\\r\\n]+ -> skip ;";
 
 	@BeforeAll
-	public static void setUp() throws IOException {
+	public static void setUp() throws IOException, NoSuchFieldException {
 		Fuzz.fuzzerInitialize();
 	}
 
@@ -29,18 +29,18 @@ class FuzzTest {
 	}
 
 	@Test
-	public void testEmpty() {
+	public void testEmpty() throws IllegalAccessException {
 		Fuzz.fuzzerTestOneInput("".getBytes(StandardCharsets.UTF_8));
 		Fuzz.fuzzerTestOneInput(null);
 	}
 
 	@Test
-	public void test() {
+	public void test() throws IllegalAccessException {
 		Fuzz.fuzzerTestOneInput("abc".getBytes(StandardCharsets.UTF_8));
 	}
 
 	@Test
-	public void testWithGrammar() {
+	public void testWithGrammar() throws IllegalAccessException {
 		Fuzz.fuzzerTestOneInput(SAMPLE_GRAMMAR.getBytes(StandardCharsets.UTF_8));
 	}
 

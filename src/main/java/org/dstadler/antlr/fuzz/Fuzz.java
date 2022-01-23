@@ -2,6 +2,8 @@ package org.dstadler.antlr.fuzz;
 
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.v4.Tool;
+import org.antlr.v4.tool.ANTLRMessage;
+import org.antlr.v4.tool.ANTLRToolListener;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.ast.GrammarRootAST;
 import org.apache.commons.io.FileUtils;
@@ -9,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 /**
  * This class provides a simple target for fuzzing antlr v4 with Jazzer
@@ -17,19 +20,39 @@ import java.io.IOException;
  * the antlr cli "tool" does.
  */
 public class Fuzz {
-	private static File tempDir;
+	private static final ANTLRToolListener EMPTY_LISTENER = new ANTLRToolListener() {
+		@Override
+		public void info(String msg) {
+		}
 
-	public static void fuzzerInitialize() throws IOException {
+		@Override
+		public void error(ANTLRMessage msg) {
+		}
+
+		@Override
+		public void warning(ANTLRMessage msg) {
+		}
+	};
+
+	private static File tempDir;
+	private static Field haveOutputDir;
+
+	public static void fuzzerInitialize() throws IOException, NoSuchFieldException {
 		tempDir = File.createTempFile("antlr-fuzz", "");
 		FileUtils.delete(tempDir);
 		FileUtils.forceMkdir(tempDir);
+
+		// need to set this to true, but it is protected
+		Class<?> clazz = Tool.class;
+		haveOutputDir = clazz.getDeclaredField("haveOutputDir");
+		haveOutputDir.setAccessible(true);
 	}
 
 	public static void fuzzerTearDown() throws IOException {
 		FileUtils.deleteDirectory(tempDir);
 	}
 
-	public static void fuzzerTestOneInput(byte[] input) {
+	public static void fuzzerTestOneInput(byte[] input) throws IllegalAccessException {
 		if (input == null) {
 			return;
 		}
@@ -37,6 +60,10 @@ public class Fuzz {
 		try {
 			Tool tool = new Tool();
 			tool.outputDirectory = tempDir.getAbsolutePath();
+			haveOutputDir.set(tool, true);
+
+			// Use an empty listener to silence error-output
+			tool.addListener(EMPTY_LISTENER);
 
 			ANTLRInputStream in = new ANTLRInputStream(new ByteArrayInputStream(input));
 			GrammarRootAST t = tool.parse("fuzzing", in);
