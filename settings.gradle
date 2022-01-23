@@ -1,0 +1,2 @@
+// to have the same name of the jar/zip distributions independent of the folder-name
+rootProject.name = 'antlr-fuzz'
