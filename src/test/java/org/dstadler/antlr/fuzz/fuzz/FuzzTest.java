@@ -55,13 +55,13 @@ class FuzzTest {
 
 	@Test
 	public void testClassCastException() throws IllegalAccessException {
-		// this causes a ClassCastException, we ignore this for now to continue fuzzing for other problems
+		// this causes an Exception, we ignore this for now to continue fuzzing for other problems
 		Fuzz.fuzzerTestOneInput("R d=H|?#".getBytes(StandardCharsets.UTF_8));
 	}
 
 	@Test
 	public void testClassCastException2() throws IllegalAccessException {
-		// this causes a ClassCastException, we ignore this for now to continue fuzzing for other problems
+		// this causes an Exception, we ignore this for now to continue fuzzing for other problems
 		Fuzz.fuzzerTestOneInput((
 				"*%*\n" +
 				"parser grammar a;\n" +
@@ -71,7 +71,7 @@ class FuzzTest {
 
 	@Test
 	public void testNullPointerException() throws IllegalAccessException {
-		// this causes a ClassCastException, we ignore this for now to continue fuzzing for other problems
+		// this causes an Exception, we ignore this for now to continue fuzzing for other problems
 		Fuzz.fuzzerTestOneInput((
 				"lexer grammar a;\n" +
 				"FROM: R ;�REF: R;\n" +
@@ -81,7 +81,7 @@ class FuzzTest {
 
 	@Test
 	public void testStringIndexOutOfBoundsException() throws IllegalAccessException {
-		// this causes a ClassCastException, we ignore this for now to continue fuzzing for other problems
+		// this causes an Exception, we ignore this for now to continue fuzzing for other problems
 		Fuzz.fuzzerTestOneInput((
 				"lexer grammar a;F:'\n" +
 				";"
@@ -90,12 +90,28 @@ class FuzzTest {
 
 	@Test
 	public void testArrayIndexOutOfBoundsException() throws IllegalAccessException {
-		// this causes a ClassCastException, we ignore this for now to continue fuzzing for other problems
+		// this causes an Exception, we ignore this for now to continue fuzzing for other problems
 		Fuzz.fuzzerTestOneInput((
 				"grammar a;\n" +
 				"fragment V: '\\����F';"
-		).getBytes(StandardCharsets.UTF_8)
-		/*FileUtils.readFileToByteArray(new File("crash-92913c4b3a73f01167a9c166e6f2192c38081415"))*/);
+		).getBytes(StandardCharsets.UTF_8));
+	}
+
+
+	@Test
+	public void testIndexOutOfBoundsException() throws IllegalAccessException {
+		// this causes an Exception, we ignore this for now to continue fuzzing for other problems
+		Fuzz.fuzzerTestOneInput((
+				"grammar a;\n" +
+				"EOF : 'if' ;\n"
+		).getBytes(StandardCharsets.UTF_8));
+	}
+
+	@Disabled("Used to reproduce a problem")
+	@Test
+	public void testCrashFile() throws IOException, IllegalAccessException {
+		// this causes an Exception, we ignore this for now to continue fuzzing for other problems
+		Fuzz.fuzzerTestOneInput(FileUtils.readFileToByteArray(new File("crash-849f6ba72aa68aabd7285a85802f9bdacebe72e6")));
 	}
 
 	@Test
