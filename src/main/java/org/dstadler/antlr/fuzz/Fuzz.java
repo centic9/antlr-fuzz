@@ -7,10 +7,12 @@ import org.antlr.v4.tool.ANTLRToolListener;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.ast.GrammarRootAST;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.NullPrintStream;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 
 /**
@@ -57,6 +59,8 @@ public class Fuzz {
 			return;
 		}
 
+		PrintStream stdout = System.out;
+		PrintStream stderr = System.err;
 		try {
 			Tool tool = new Tool();
 			tool.outputDirectory = tempDir.getAbsolutePath();
@@ -64,6 +68,10 @@ public class Fuzz {
 
 			// Use an empty listener to silence error-output
 			tool.addListener(EMPTY_LISTENER);
+
+			// avoid error messages via System.out which cannot be avoided otherwise
+			System.setOut(new NullPrintStream());
+			System.setErr(new NullPrintStream());
 
 			ANTLRInputStream in = new ANTLRInputStream(new ByteArrayInputStream(input));
 			GrammarRootAST t = tool.parse("fuzzing", in);
@@ -78,6 +86,14 @@ public class Fuzz {
 			tool.process(g, true);
 		} catch (IOException e) {
 			// expected here
+		} catch (ClassCastException e) {
+			// ignore one ClassCastException that I found until it is fixed in antlr
+			if (!e.getMessage().contains("org.antlr.v4.tool.ast.GrammarASTErrorNode cannot be cast to class org.antlr.v4.tool.ast.AltAST")) {
+				throw e;
+			}
+		} finally {
+			System.setOut(stdout);
+			System.setErr(stderr);
 		}
 	}
 }

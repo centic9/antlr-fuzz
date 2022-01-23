@@ -45,6 +45,19 @@ class FuzzTest {
 	}
 
 	@Test
+	public void testWithInvalidGrammar() throws IllegalAccessException {
+		// this previously printed out an error the stdout, now it should
+		// be prevented by redirecting stdout
+		Fuzz.fuzzerTestOneInput((SAMPLE_GRAMMAR + "{").getBytes(StandardCharsets.UTF_8));
+	}
+
+	@Test
+	public void testClassCastException() throws IllegalAccessException {
+		// this causes a ClassCastException, we ignore this for now to continue fuzzing for other problems
+		Fuzz.fuzzerTestOneInput("R d=H|?#".getBytes(StandardCharsets.UTF_8));
+	}
+
+	@Test
 	public void testLog() {
 		// should not be logged
 		Logger LOG = LogManager.getLogger(FuzzTest.class);
