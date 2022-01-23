@@ -67,6 +67,13 @@ class FuzzTest {
 	}
 
 	@Test
+	public void testStringIndexOutOfBoundsException() throws IllegalAccessException {
+		// this causes a ClassCastException, we ignore this for now to continue fuzzing for other problems
+		Fuzz.fuzzerTestOneInput(("lexer grammar a;F:'\n" +
+				";").getBytes(StandardCharsets.UTF_8));
+	}
+
+	@Test
 	public void testLog() {
 		// should not be logged
 		Logger LOG = LogManager.getLogger(FuzzTest.class);
