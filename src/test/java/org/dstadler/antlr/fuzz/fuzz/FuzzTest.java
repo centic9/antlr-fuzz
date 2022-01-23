@@ -30,19 +30,21 @@ class FuzzTest {
 	}
 
 	@Test
-	public void test() throws IOException {
+	public void test() {
 		Fuzz.fuzzerTestOneInput(provider);
 
-		when(provider.consumeAsciiString(anyInt())).thenReturn("abc");
-		when(provider.consumeString(anyInt())).thenReturn("abc");
+		when(provider.consumeRemainingAsString()).thenReturn("abc");
 
 		Fuzz.fuzzerTestOneInput(provider);
 	}
 
 	@Test
-	public void testWithQuery() throws IOException {
-		when(provider.consumeInt(anyInt(), anyInt())).thenReturn(1);
-		when(provider.consumeString(anyInt())).thenReturn("SELECT * from usersession");
+	public void testWithGrammar() {
+		when(provider.consumeRemainingAsString()).thenReturn(
+			"grammar Hello;\n" +
+			"r  : 'hello' ID ;\n" +
+			"ID : [a-z]+ ;\n" +
+			"WS : [ \\t\\r\\n]+ -> skip ;");
 
 		Fuzz.fuzzerTestOneInput(provider);
 	}

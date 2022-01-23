@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * This class provides a simple target for fuzzing antlr v4 with Jazzer
@@ -35,7 +36,13 @@ public class Fuzz {
 			Tool tool = new Tool();
 			tool.outputDirectory = tempDir.getAbsolutePath();
 
-			ANTLRInputStream in = new ANTLRInputStream(new ByteArrayInputStream(data.consumeRemainingAsBytes()));
+			String string = data.consumeRemainingAsString();
+			if (string == null) {
+				return;
+			}
+
+			byte[] buf = string.getBytes(StandardCharsets.UTF_8);
+			ANTLRInputStream in = new ANTLRInputStream(new ByteArrayInputStream(buf));
 			GrammarRootAST t = tool.parse("fuzzing", in);
 			if (t == null) {
 				return;
@@ -45,6 +52,7 @@ public class Fuzz {
 			g.fileName = "fuzzing";
 
 			tool.process(g, false);
+			tool.process(g, true);
 		} catch (IOException e) {
 			// expected here
 		}
