@@ -89,6 +89,16 @@ class FuzzTest {
 	}
 
 	@Test
+	public void testArrayIndexOutOfBoundsException() throws IllegalAccessException {
+		// this causes a ClassCastException, we ignore this for now to continue fuzzing for other problems
+		Fuzz.fuzzerTestOneInput((
+				"grammar a;\n" +
+				"fragment V: '\\����F';"
+		).getBytes(StandardCharsets.UTF_8)
+		/*FileUtils.readFileToByteArray(new File("crash-92913c4b3a73f01167a9c166e6f2192c38081415"))*/);
+	}
+
+	@Test
 	public void testLog() {
 		// should not be logged
 		Logger LOG = LogManager.getLogger(FuzzTest.class);

@@ -55,6 +55,7 @@ The following issues were detected:
 * ClassCastException
 * StringIndexOutOfBoundsException
 * NullPointerException
+* ArrayIndexOutOfBoundsException
 
 For now the Fuzzing target ignores these, see the class `FuzzTest` for reproducing test-cases for all of these.
 

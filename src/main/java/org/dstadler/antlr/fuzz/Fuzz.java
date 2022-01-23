@@ -94,8 +94,9 @@ public class Fuzz {
 					!e.getMessage().contains("org.antlr.v4.tool.ast.GrammarAST cannot be cast to org.antlr.v4.tool.ast.GrammarASTWithOptions")) {
 				throw e;
 			}
-		} catch (StringIndexOutOfBoundsException | NullPointerException e) {
-			// happens currently, see unit-tests for reproducing grammar
+		} catch (StringIndexOutOfBoundsException | NullPointerException | ArrayIndexOutOfBoundsException e) {
+			// all these exceptions are thrown currently in special cases,
+			// see the unit-tests for minimal reproducing grammar-snippets
 		} finally {
 			System.setOut(stdout);
 			System.setErr(stderr);
