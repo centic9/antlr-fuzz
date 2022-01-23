@@ -1,6 +1,5 @@
 package org.dstadler.antlr.fuzz;
 
-import com.code_intelligence.jazzer.api.FuzzedDataProvider;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.v4.Tool;
 import org.antlr.v4.tool.Grammar;
@@ -10,7 +9,6 @@ import org.apache.commons.io.FileUtils;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 /**
  * This class provides a simple target for fuzzing antlr v4 with Jazzer
@@ -31,18 +29,16 @@ public class Fuzz {
 		FileUtils.deleteDirectory(tempDir);
 	}
 
-	public static void fuzzerTestOneInput(FuzzedDataProvider data) {
+	public static void fuzzerTestOneInput(byte[] input) {
+		if (input == null) {
+			return;
+		}
+
 		try {
 			Tool tool = new Tool();
 			tool.outputDirectory = tempDir.getAbsolutePath();
 
-			String string = data.consumeRemainingAsString();
-			if (string == null) {
-				return;
-			}
-
-			byte[] buf = string.getBytes(StandardCharsets.UTF_8);
-			ANTLRInputStream in = new ANTLRInputStream(new ByteArrayInputStream(buf));
+			ANTLRInputStream in = new ANTLRInputStream(new ByteArrayInputStream(input));
 			GrammarRootAST t = tool.parse("fuzzing", in);
 			if (t == null) {
 				return;

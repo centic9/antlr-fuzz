@@ -1,9 +1,5 @@
 package org.dstadler.antlr.fuzz.fuzz;
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dstadler.antlr.fuzz.Fuzz;
@@ -12,12 +8,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import com.code_intelligence.jazzer.api.FuzzedDataProvider;
-
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 class FuzzTest {
-	FuzzedDataProvider provider = mock(FuzzedDataProvider.class);
+
+	public static final String SAMPLE_GRAMMAR = "grammar Hello;\n" +
+			"r  : 'hello' ID ;\n" +
+			"ID : [a-z]+ ;\n" +
+			"WS : [ \\t\\r\\n]+ -> skip ;";
 
 	@BeforeAll
 	public static void setUp() throws IOException {
@@ -30,23 +29,19 @@ class FuzzTest {
 	}
 
 	@Test
+	public void testEmpty() {
+		Fuzz.fuzzerTestOneInput("".getBytes(StandardCharsets.UTF_8));
+		Fuzz.fuzzerTestOneInput(null);
+	}
+
+	@Test
 	public void test() {
-		Fuzz.fuzzerTestOneInput(provider);
-
-		when(provider.consumeRemainingAsString()).thenReturn("abc");
-
-		Fuzz.fuzzerTestOneInput(provider);
+		Fuzz.fuzzerTestOneInput("abc".getBytes(StandardCharsets.UTF_8));
 	}
 
 	@Test
 	public void testWithGrammar() {
-		when(provider.consumeRemainingAsString()).thenReturn(
-			"grammar Hello;\n" +
-			"r  : 'hello' ID ;\n" +
-			"ID : [a-z]+ ;\n" +
-			"WS : [ \\t\\r\\n]+ -> skip ;");
-
-		Fuzz.fuzzerTestOneInput(provider);
+		Fuzz.fuzzerTestOneInput(SAMPLE_GRAMMAR.getBytes(StandardCharsets.UTF_8));
 	}
 
 	@Test
