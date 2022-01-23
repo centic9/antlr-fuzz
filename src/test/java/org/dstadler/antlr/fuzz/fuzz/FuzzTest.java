@@ -60,17 +60,22 @@ class FuzzTest {
 	}
 
 	@Test
-	public void testClassCastException2() throws IllegalAccessException, IOException {
+	public void testClassCastException2() throws IllegalAccessException {
 		// this causes a ClassCastException, we ignore this for now to continue fuzzing for other problems
-		Fuzz.fuzzerTestOneInput(FileUtils.readFileToByteArray(new File(
-				"src/test/resources/crash-344d570ce5cfdd0bb915d84ff07a7e87b1080062")));
+		Fuzz.fuzzerTestOneInput((
+				"*%*\n" +
+				"parser grammar a;\n" +
+				"options {}"
+		).getBytes(StandardCharsets.UTF_8));
 	}
 
 	@Test
 	public void testStringIndexOutOfBoundsException() throws IllegalAccessException {
 		// this causes a ClassCastException, we ignore this for now to continue fuzzing for other problems
-		Fuzz.fuzzerTestOneInput(("lexer grammar a;F:'\n" +
-				";").getBytes(StandardCharsets.UTF_8));
+		Fuzz.fuzzerTestOneInput((
+				"lexer grammar a;F:'\n" +
+				";"
+		).getBytes(StandardCharsets.UTF_8));
 	}
 
 	@Test
