@@ -89,7 +89,9 @@ public class Fuzz {
 		} catch (ClassCastException e) {
 			// ignore one ClassCastException that I found until it is fixed in antlr
 			if (!e.getMessage().contains("org.antlr.v4.tool.ast.GrammarASTErrorNode cannot be cast to class org.antlr.v4.tool.ast.AltAST") &&
-					!e.getMessage().contains("org.antlr.v4.tool.ast.GrammarAST cannot be cast to class org.antlr.v4.tool.ast.GrammarASTWithOptions")) {
+					!e.getMessage().contains("org.antlr.v4.tool.ast.GrammarASTErrorNode cannot be cast to org.antlr.v4.tool.ast.AltAST") &&
+					!e.getMessage().contains("org.antlr.v4.tool.ast.GrammarAST cannot be cast to class org.antlr.v4.tool.ast.GrammarASTWithOptions") &&
+					!e.getMessage().contains("org.antlr.v4.tool.ast.GrammarAST cannot be cast to org.antlr.v4.tool.ast.GrammarASTWithOptions")) {
 				throw e;
 			}
 		} catch (StringIndexOutOfBoundsException | NullPointerException e) {
