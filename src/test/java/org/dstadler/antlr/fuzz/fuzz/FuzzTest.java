@@ -1,8 +1,6 @@
 package org.dstadler.antlr.fuzz.fuzz;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.dstadler.antlr.fuzz.Fuzz;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -112,13 +110,6 @@ class FuzzTest {
 	public void testCrashFile() throws IOException, IllegalAccessException {
 		// this causes an Exception, we ignore this for now to continue fuzzing for other problems
 		Fuzz.fuzzerTestOneInput(FileUtils.readFileToByteArray(new File("crash-849f6ba72aa68aabd7285a85802f9bdacebe72e6")));
-	}
-
-	@Test
-	public void testLog() {
-		// should not be logged
-		Logger LOG = LogManager.getLogger(FuzzTest.class);
-		LOG.atError().log("Test log output which should not be visible -----------------------");
 	}
 
 	@Disabled("Local test for verifying a slow run")
