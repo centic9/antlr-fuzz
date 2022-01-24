@@ -30,3 +30,8 @@ test {
 wrapper {
 	gradleVersion = '6.6.1'
 }
+
+task getDeps(type: Copy) {
+	from sourceSets.main.runtimeClasspath
+	into 'build/runtime/'
+}
