@@ -95,7 +95,6 @@ class FuzzTest {
 		).getBytes(StandardCharsets.UTF_8));
 	}
 
-
 	@Test
 	public void testIndexOutOfBoundsException() throws IllegalAccessException {
 		// this causes an Exception, we ignore this for now to continue fuzzing for other problems
