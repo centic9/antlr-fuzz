@@ -40,7 +40,7 @@ Unpack the archive:
 
 Invoke the fuzzing:
 
-    ./jazzer --cp=build/libs/antlr-fuzz-all.jar --instrumentation_includes=org.antlr.** --target_class=org.dstadler.antlr.fuzz.Fuzz -rss_limit_mb=4096 --jvm_args=-Xss4m corpus
+    ./jazzer --cp=build/libs/antlr-fuzz-all.jar --instrumentation_includes=org.antlr.** --target_class=org.dstadler.antlr.fuzz.Fuzz -rss_limit_mb=1024 --jvm_args=-Xss4m corpus
 
 In this mode Jazzer will stop whenever it detects an unexpected exception 
 or crashes.

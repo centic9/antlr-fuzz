@@ -41,7 +41,7 @@ mkdir -p build/jacoco
   --target_class=org.dstadler.antlr.fuzz.Fuzz \
   --nohooks \
   --jvm_args="-javaagent\\:build/jacocoagent.jar=destfile=build/jacoco/corpus.exec" \
-  -rss_limit_mb=4096 \
+  -rss_limit_mb=1024 \
   -runs=0 \
   corpus
 
