@@ -70,8 +70,8 @@ public class Fuzz {
 			tool.addListener(EMPTY_LISTENER);
 
 			// avoid error messages via System.out which cannot be avoided otherwise
-			System.setOut(new NullPrintStream());
-			System.setErr(new NullPrintStream());
+			System.setOut(NullPrintStream.INSTANCE);
+			System.setErr(NullPrintStream.INSTANCE);
 
 			ANTLRInputStream in = new ANTLRInputStream(new ByteArrayInputStream(input));
 			GrammarRootAST t = tool.parse("fuzzing", in);
