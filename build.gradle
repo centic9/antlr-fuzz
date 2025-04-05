@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.antlr:antlr4:4.13.1'
+	implementation 'org.antlr:antlr4:4.13.2'
 
 	implementation 'commons-io:commons-io:2.18.0'
 
@@ -32,7 +32,7 @@ wrapper {
 	gradleVersion = '8.5'
 }
 
-task getDeps(type: Copy) {
+tasks.register('getDeps', Copy) {
 	from sourceSets.main.runtimeClasspath
 	into 'build/runtime/'
 }
